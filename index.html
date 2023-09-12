@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Light</title>
+    <link rel="stylesheet" href="public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/css/styles.css">
+
+    <style>
+        .number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: red;
+            line-height: 30px;
+            text-align: center;
+            margin: 10px;
+            position: absolute;
+
+        }
+
+        .wrap-number {
+            height: 500px;
+            width: 1000px;
+            border: 1px solid greenyellow;
+        }
+    </style>
+
+</head>
+
+<body>
+    <button class="start">Start</button>
+    <button class="stop">Stop</button>
+    <div class="score fs-2">0</div>
+    <div class="time fs-2">60</div>
+    <div class="wrap-number container mx-auto d-flex flex-wrap position-relative">
+    </div>
+
+
+    <script>
+        const start = document.querySelector('.start');
+        const stop = document.querySelector('.stop');
+        const numbers = document.querySelectorAll('.number');
+        const score = document.querySelector('.score');
+        const time = document.querySelector('.time');
+        let wrapNumber = document.querySelector('.wrap-number');
+        let t;
+
+        // bat dau choi
+        let clickStart = start.addEventListener('click', function letGame() {
+            let sc = 0;
+            score.textContent = 0;
+            time.textContent = 60;
+            start.style.display = 'none';
+
+            for (let i = 1; i <= 10; i++) {
+                // tao div num
+                let num = document.createElement('div');
+                num.style.left = Math.floor(Math.random() * 901) + 'px';
+                num.style.top = Math.floor(Math.random() * 451) + 'px';
+                num.style.cursor = 'pointer';
+                num.style.backgroundColor = 'red';
+                num.classList.add('number');
+                num.textContent = i;
+
+                // click div num
+                num.addEventListener('click', function () {
+                    if (num.textContent == (sc + 1)) {
+                        score.textContent = sc + 1;
+                        num.style.backgroundColor = 'grey';
+                        sc += 1;
+                        num.style.cursor = 'default';
+                    }
+                });
+                console.log(num);
+                wrapNumber.append(num);
+            }
+
+            // Set thoi gian choi
+            t = setTimeout(function Count() {
+                if (time.textContent > 0) {
+                    time.textContent = +time.textContent - 1;
+                    t = setTimeout(Count, 1000);
+                }
+                else {
+                    alert('Het gio ! \nBan dat duoc: ' + sc + ' diem');
+                    start.style.display = 'inline-block';
+                    numbers.forEach(element => {
+                        element.style.left = '0px';
+                        element.style.top = '0px';
+                    });
+                }
+            }, 1000);
+        })
+
+        // Dung choi
+        stop.addEventListener('click', function () {
+            alert('Dung choi');
+            clearTimeout(t);
+            score.textContent = 0;
+            numbers.forEach(element => {
+                element.style.left = '0px';
+                element.style.top = '0px';
+            });
+            start.style.display = 'inline-block';
+            document.querySelectorAll('.number').forEach(element => {
+                element.remove();
+            });
+        })
+    </script>
+</body>
+
+</html>
